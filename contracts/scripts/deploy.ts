@@ -1,5 +1,9 @@
 import hre, { ethers } from "hardhat";
-import { Profile__factory } from "../typechain-types";
+import {
+  Challenge__factory,
+  Profile__factory,
+  TrustingVerifier__factory,
+} from "../typechain-types";
 import { deployedContracts } from "./helpers/constants";
 
 async function main() {
@@ -32,6 +36,42 @@ async function main() {
         `npx hardhat verify --network ${chain} ${contract.address}`
     );
     chainContracts.profile = contract.address;
+  }
+
+  // Deploy challenge contract
+  if (!chainContracts.challenge) {
+    console.log(`\n👟 Start deploy challenge contract`);
+    const contract = await new Challenge__factory(deployerWallet).deploy();
+    await contract.deployed();
+    await contract.initialize(
+      chainContracts.verifier || ethers.constants.AddressZero
+    );
+    console.log("✅ Contract deployed to: " + contract.address);
+    console.log(
+      "👉 Command for vefifying: " +
+        `npx hardhat verify --network ${chain} ${contract.address}`
+    );
+    chainContracts.challenge = contract.address;
+  }
+
+  // Deploy verifier contract
+  if (!chainContracts.verifier) {
+    console.log(`\n👟 Start deploy verifier contract`);
+    const contract = await new TrustingVerifier__factory(deployerWallet).deploy(
+      chainContracts.challenge
+    );
+    await contract.deployed();
+    console.log("✅ Contract deployed to " + contract.address);
+    console.log(
+      "👉 Command for vefifying: " +
+        `npx hardhat verify --network ${chain} ${contract.address} ${chainContracts.challenge}`
+    );
+    chainContracts.verifier = contract.address;
+    console.log("⚡ Send contract address to challenge");
+    await Challenge__factory.connect(
+      chainContracts.challenge,
+      deployerWallet
+    ).setVerifierAddress(contract.address);
   }
 }
 
