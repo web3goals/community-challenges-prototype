@@ -25,94 +25,82 @@ const xdcTestnetChallengeContractAddress =
   process.env.NEXT_PUBLIC_XDC_TESTNET_CHALLENGE_CONTRACT_ADDRESS;
 
 /**
- * Get 5ire testnet chain.
+ * Custom chains
  */
-export function getFiveIreTestnetChain(): Chain {
-  return {
-    id: 997,
-    name: "5ire Testnet",
-    network: "5ire-testnet",
-    nativeCurrency: {
-      decimals: 18,
-      name: "5ire",
-      symbol: "5ire",
+const fiveIreTestnetChain: Chain = {
+  id: 997,
+  name: "5ire Testnet",
+  network: "5ire-testnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "5ire",
+    symbol: "5ire",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc-testnet.5ire.network"],
     },
-    rpcUrls: {
-      default: {
-        http: ["https://rpc-testnet.5ire.network"],
-      },
-      public: {
-        http: ["https://rpc-testnet.5ire.network"],
-      },
+    public: {
+      http: ["https://rpc-testnet.5ire.network"],
     },
-    blockExplorers: {
-      default: {
-        name: "5ire Testnet Explorer",
-        url: "https://explorer.5ire.network",
-      },
+  },
+  blockExplorers: {
+    default: {
+      name: "5ire Testnet Explorer",
+      url: "https://explorer.5ire.network",
     },
-  };
-}
+  },
+};
 
-/**
- * Get mantle testnet chain.
- */
-export function getMantleTestnetChain(): Chain {
-  return {
-    id: 5001,
-    name: "Mantle Testnet",
-    network: "mantle-testnet",
-    nativeCurrency: {
-      decimals: 18,
-      name: "BIT",
-      symbol: "BIT",
+const mantleTestnetChain: Chain = {
+  id: 5001,
+  name: "Mantle Testnet",
+  network: "mantle-testnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "BIT",
+    symbol: "BIT",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.testnet.mantle.xyz"],
     },
-    rpcUrls: {
-      default: {
-        http: ["https://rpc.testnet.mantle.xyz"],
-      },
-      public: {
-        http: ["https://rpc.testnet.mantle.xyz"],
-      },
+    public: {
+      http: ["https://rpc.testnet.mantle.xyz"],
     },
-    blockExplorers: {
-      default: {
-        name: "Mantle Testnet Explorer",
-        url: "https://explorer.testnet.mantle.xyz",
-      },
+  },
+  blockExplorers: {
+    default: {
+      name: "Mantle Testnet Explorer",
+      url: "https://explorer.testnet.mantle.xyz",
     },
-  };
-}
+  },
+};
 
-/**
- * Get xdc testnet chain.
- */
-export function getXdcTestnetChain(): Chain {
-  return {
-    id: 51,
-    name: "XDC Apothem Testnet",
-    network: "xdc-testnet",
-    nativeCurrency: {
-      decimals: 18,
-      name: "XDC",
-      symbol: "XDC",
+const xdcTestnetChain: Chain = {
+  id: 51,
+  name: "XDC Apothem Testnet",
+  network: "xdc-testnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "XDC",
+    symbol: "XDC",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://erpc.apothem.network"],
     },
-    rpcUrls: {
-      default: {
-        http: ["https://erpc.apothem.network"],
-      },
-      public: {
-        http: ["https://erpc.apothem.network"],
-      },
+    public: {
+      http: ["https://erpc.apothem.network"],
     },
-    blockExplorers: {
-      default: {
-        name: "XDC Testnet Explorer",
-        url: "https://explorer.apothem.network/",
-      },
+  },
+  blockExplorers: {
+    default: {
+      name: "XDC Testnet Explorer",
+      url: "https://explorer.apothem.network/",
     },
-  };
-}
+  },
+};
 
 /**
  * Get the first chain from supported chains.
@@ -138,16 +126,16 @@ export function getSupportedChains(): Array<Chain> {
     fiveIreTestnetChallengeContractAddress &&
     fiveIreTestnetProfileContractAddress
   ) {
-    chains.push(getFiveIreTestnetChain());
+    chains.push(fiveIreTestnetChain);
   }
   if (
     mantleTestnetChallengeContractAddress &&
     mantleTestnetProfileContractAddress
   ) {
-    chains.push(getMantleTestnetChain());
+    chains.push(mantleTestnetChain);
   }
   if (xdcTestnetChallengeContractAddress && xdcTestnetProfileContractAddress) {
-    chains.push(getXdcTestnetChain());
+    chains.push(xdcTestnetChain);
   }
   if (chains.length === 0) {
     console.error("Not found supported chains");
@@ -189,6 +177,21 @@ export function getProfileContractAddress(
   if (chain?.id === polygonMumbai.id && mumbaiProfileContractAddress) {
     return stringToAddress(mumbaiProfileContractAddress);
   }
+  if (
+    chain?.id === fiveIreTestnetChain.id &&
+    fiveIreTestnetProfileContractAddress
+  ) {
+    return stringToAddress(fiveIreTestnetProfileContractAddress);
+  }
+  if (
+    chain?.id === mantleTestnetChain.id &&
+    mantleTestnetProfileContractAddress
+  ) {
+    return stringToAddress(mantleTestnetProfileContractAddress);
+  }
+  if (chain?.id === xdcTestnetChain.id && xdcTestnetProfileContractAddress) {
+    return stringToAddress(xdcTestnetProfileContractAddress);
+  }
   console.error(`Not found profile contract address for chain: ${chain?.name}`);
   return undefined;
 }
@@ -204,6 +207,21 @@ export function getChallengeContractAddress(
   }
   if (chain?.id === polygonMumbai.id && mumbaiChallengeContractAddress) {
     return stringToAddress(mumbaiChallengeContractAddress);
+  }
+  if (
+    chain?.id === fiveIreTestnetChain.id &&
+    fiveIreTestnetChallengeContractAddress
+  ) {
+    return stringToAddress(fiveIreTestnetChallengeContractAddress);
+  }
+  if (
+    chain?.id === mantleTestnetChain.id &&
+    mantleTestnetChallengeContractAddress
+  ) {
+    return stringToAddress(mantleTestnetChallengeContractAddress);
+  }
+  if (chain?.id === xdcTestnetChain.id && xdcTestnetChallengeContractAddress) {
+    return stringToAddress(xdcTestnetChallengeContractAddress);
   }
   console.error(
     `Not found challenge contract address for chain: ${chain?.name}`
