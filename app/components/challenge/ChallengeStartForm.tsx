@@ -60,7 +60,7 @@ export default function ChallengeStartForm(props: {
       "Code minimum an hour and tweet your progress for 30 days with the #30DaysOfCode hashtag and mention @BestDevsDAO to win prizes from BestDevsDAO",
     prize: 0.1,
     prizeCurrency: "native",
-    deadline: "2023-06-01",
+    deadline: "2023-03-01",
   });
   const formValidationSchema = yup.object({
     duration: yup.number().required(),
