@@ -18,3 +18,7 @@ Community Challenges is an application that helps communities and DAOs increase 
 4. Participants fulfill all conditions and mark the challenge as completed, which will be verified by smart contracts and oracles.
 5. After the deadline, the community finalizes the challenge, and each participant with a verified completion will receive a part of the prize pool.
 6. Eventually everyone is happy, and the community becomes more engaged.
+
+## 🏗️ Architecture
+
+![Architecture](images/architecture.png)
